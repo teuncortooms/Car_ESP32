@@ -7,7 +7,6 @@
 const char *ssid = "Teun";
 const char *password = "jezes666";
 
-String _message;
 CarController _carController;
 WifiMessenger _wifiMessenger;
 WifiPrinter _wifiPrinter;
@@ -30,5 +29,7 @@ void setup()
 void loop()
 {
   String message = _wifiMessenger.GetMessage();
-  _carController.Enforce(_message);
+  if (message != "")
+    Serial.println(message);
+  _carController.Enforce(message);
 }

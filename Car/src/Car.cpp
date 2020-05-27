@@ -2,62 +2,63 @@
 
 class Car
 {
-    int _up;
-    int _down;
-    int _left;
-    int _right;
+    int _upIndex;
+    int _downIndex;
+    int _leftIndex;
+    int _rightIndex;
+    int pins[4];
+    int states[4];
 
 public:
     Car(int up, int down, int left, int right)
     {
-        _up = up;
-        _down = down;
-        _left = left;
-        _right = right;
+        _upIndex = 0;
+        _downIndex = 1;
+        _leftIndex = 2;
+        _rightIndex = 3;
+        pins[_upIndex] = up;
+        pins[_downIndex] = down;
+        pins[_leftIndex] = left;
+        pins[_rightIndex] = right;
+        for (int index : states)
+        {
+            states[index] = LOW;
+        }
         setup();
     }
 
     void GoUp()
     {
-        Serial.println("Going up");
-        // Serial.println(_endMarker);
-        startPin(_up);
+        togglePin(_upIndex);
     }
 
     void GoDown()
     {
-        Serial.println("Going down");
-        // Serial.println(_endMarker);
-        startPin(_down);
+        togglePin(_downIndex);
     }
 
     void GoLeft()
     {
-        Serial.println("Going left");
-        // Serial.println(_endMarker);
-        startPin(_left);
+        togglePin(_leftIndex);
     }
 
     void GoRight()
     {
-        Serial.println("Going right");
-        // Serial.println(_endMarker);
-        startPin(_right);
+        togglePin(_rightIndex);
     }
 
 private:
     void setup()
     {
-        pinMode(_up, OUTPUT);
-        pinMode(_down, OUTPUT);
-        pinMode(_left, OUTPUT);
-        pinMode(_right, OUTPUT);
+        for (int index : pins)
+        {
+            pinMode(index, OUTPUT);
+        }
     }
 
-    void startPin(int pin)
+    void togglePin(int pinIndex)
     {
-        digitalWrite(pin, HIGH);
-        delay(500);
-        digitalWrite(pin, LOW);
+        states[pinIndex] = !states[pinIndex];
+        digitalWrite(pins[pinIndex], states[pinIndex]);
     }
 };

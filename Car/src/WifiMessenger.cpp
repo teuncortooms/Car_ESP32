@@ -32,35 +32,28 @@ public:
 private:
     void getInput()
     {
-        delay(500);
-        if (_client)
+        if (!_client)
         {
-            // Serial.println("h");
+            _client = _server.available();
+        }
+        else
+        {
             if (_client.connected())
             {
-                // Serial.println("a");
                 if (_client.available())
                 {
-                    // Serial.println("l");
-                    char c = (char)_client.read();
+                    char c = _client.read();
                     if (c == _endMarker)
                     {
-                        // Serial.println("o");
                         _messageIsComplete = true;
                         sendNewPage();
                         _client.stop();
                     }
                     else
                     {
-                        // Serial.println("u");
                         _message += c;
                     }
                 }
-            }
-            else
-            {
-                // Serial.println("q");
-                _client = _server.available();
             }
         }
     }
