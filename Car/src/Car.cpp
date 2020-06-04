@@ -2,55 +2,60 @@
 
 class Car
 {
-    int _upIndex;
-    int _downIndex;
-    int _leftIndex;
-    int _rightIndex;
-    int pins[4];
-    int states[4];
+    int indexOfLeftMotorForwards;
+    int indexOfLeftMotorBackwards;
+    int indexOfRightMotorForwards;
+    int indexOfRightMotorBackwards;
+    int pinsCount = 4;
+    int pins[pinsCount];
+    int states[pinsCount];
 
 public:
-    Car(int up, int down, int left, int right)
+    Car(int pinOfLeftMotorForwards, int down, int left, int right)
     {
-        _upIndex = 0;
-        _downIndex = 1;
-        _leftIndex = 2;
-        _rightIndex = 3;
-        pins[_upIndex] = up;
-        pins[_downIndex] = down;
-        pins[_leftIndex] = left;
-        pins[_rightIndex] = right;
-        for (int index : states)
+        this.indexOfLeftMotorForwards = 0;
+        this.indexOfLeftMotorBackwards = 1;
+        this.indexOfRightMotorForwards = 2;
+        this.indexOfRightMotorBackwards = 3;
+        this.pins[indexOfLeftMotorForwards] = pinOfLeftMotorForwards;
+        this.pins[indexOfLeftMotorBackwards] = down;
+        this.pins[indexOfRightMotorForwards] = left;
+        this.pins[indexOfRightMotorBackwards] = right;
+        for (int index : this.states)
         {
-            states[index] = LOW;
+            this.states[index] = LOW;
         }
         setup();
     }
 
     void GoUp()
     {
-        togglePin(_upIndex);
+        switchAllOff();
+        switchOn(this.indexOfLeftMotorForwards);
     }
 
     void GoDown()
     {
-        togglePin(_downIndex);
+        switchAllOff();
+        switchOn(this.indexOfLeftMotorBackwards);
     }
 
     void GoLeft()
     {
-        togglePin(_leftIndex);
+        switchAllOff();
+        switchOn(this.indexOfRightMotorForwards);
     }
 
     void GoRight()
     {
-        togglePin(_rightIndex);
+        switchAllOff();
+        switchOn(this.indexOfRightMotorBackwards);
     }
 
 private:
     void setup()
     {
-        for (int index : pins)
+        for (int index : this.pins)
         {
             pinMode(index, OUTPUT);
         }
@@ -58,7 +63,27 @@ private:
 
     void togglePin(int pinIndex)
     {
-        states[pinIndex] = !states[pinIndex];
+        this.states[pinIndex] = !this.states[pinIndex];
+        digitalWrite(this.pins[pinIndex], this.states[pinIndex]);
+    }
+
+    void switchOn(int pinIndex)
+    {
+        this.states[pinIndex] = HIGH;
+        digitalWrite(this.pins[pinIndex], this.states[pinIndex]);
+    }
+
+    void switchOff(int pinIndex)
+    {
+        states[pinIndex] = LOW;
         digitalWrite(pins[pinIndex], states[pinIndex]);
+    }
+
+    void switchAllOff()
+    {
+        for (int i = 0; i < this.pinsCount; i++)
+        {
+            switchOff(i);
+        }
     }
 };
