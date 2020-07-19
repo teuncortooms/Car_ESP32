@@ -1,89 +1,81 @@
-#include <Arduino.h>
+#include "Car.h"
 
-class Car
+Car::Car(int LeftAcceleratePin, int LeftReversePin, int RightAcceleratePin, int RightReversePin)
 {
-    int indexOfLeftMotorForwards;
-    int indexOfLeftMotorBackwards;
-    int indexOfRightMotorForwards;
-    int indexOfRightMotorBackwards;
-    int pinsCount = 4;
-    int pins[pinsCount];
-    int states[pinsCount];
-
-public:
-    Car(int pinOfLeftMotorForwards, int down, int left, int right)
+    this->indexLeftAccelerate = 0;
+    this->indexLeftReverse = 1;
+    this->indexRightAccelerate = 2;
+    this->indexRightReverse = 3;
+    this->pins[indexLeftAccelerate] = LeftAcceleratePin;
+    this->pins[indexLeftReverse] = LeftReversePin;
+    this->pins[indexRightAccelerate] = RightAcceleratePin;
+    this->pins[indexRightReverse] = RightReversePin;
+    for (int index : this->states)
     {
-        this.indexOfLeftMotorForwards = 0;
-        this.indexOfLeftMotorBackwards = 1;
-        this.indexOfRightMotorForwards = 2;
-        this.indexOfRightMotorBackwards = 3;
-        this.pins[indexOfLeftMotorForwards] = pinOfLeftMotorForwards;
-        this.pins[indexOfLeftMotorBackwards] = down;
-        this.pins[indexOfRightMotorForwards] = left;
-        this.pins[indexOfRightMotorBackwards] = right;
-        for (int index : this.states)
-        {
-            this.states[index] = LOW;
-        }
-        setup();
+        this->states[index] = LOW;
     }
+    setup();
+}
 
-    void GoUp()
-    {
-        switchAllOff();
-        switchOn(this.indexOfLeftMotorForwards);
-    }
+void Car::GoUp()
+{
+    switchAllOff();
+    switchOn(this->indexLeftAccelerate);
+    switchOn(this->indexRightAccelerate);
+}
 
-    void GoDown()
-    {
-        switchAllOff();
-        switchOn(this.indexOfLeftMotorBackwards);
-    }
+void Car::GoDown()
+{
+    switchAllOff();
+    switchOn(this->indexLeftReverse);
+    switchOn(this->indexRightReverse);
+}
 
-    void GoLeft()
-    {
-        switchAllOff();
-        switchOn(this.indexOfRightMotorForwards);
-    }
+void Car::GoLeft()
+{
+    switchAllOff();
+    switchOn(this->indexRightAccelerate);
+    switchOn(this->indexLeftReverse);
+}
 
-    void GoRight()
-    {
-        switchAllOff();
-        switchOn(this.indexOfRightMotorBackwards);
-    }
+void Car::GoRight()
+{
+    switchAllOff();
+    switchOn(this->indexRightReverse);
+    switchOn(this->indexLeftAccelerate);
+}
 
-private:
-    void setup()
+void Car::setup()
+{
+    for (int index : this->pins)
     {
-        for (int index : this.pins)
-        {
-            pinMode(index, OUTPUT);
-        }
+        pinMode(index, OUTPUT);
     }
+}
 
-    void togglePin(int pinIndex)
-    {
-        this.states[pinIndex] = !this.states[pinIndex];
-        digitalWrite(this.pins[pinIndex], this.states[pinIndex]);
-    }
+void Car::togglePin(int pinIndex)
+{
+    this->states[pinIndex] = !this->states[pinIndex];
+    digitalWrite(this->pins[pinIndex], this->states[pinIndex]);
+}
 
-    void switchOn(int pinIndex)
-    {
-        this.states[pinIndex] = HIGH;
-        digitalWrite(this.pins[pinIndex], this.states[pinIndex]);
-    }
+void Car::switchOn(int pinIndex)
+{
+    this->states[pinIndex] = HIGH;
+    digitalWrite(this->pins[pinIndex], this->states[pinIndex]);
+}
 
-    void switchOff(int pinIndex)
-    {
-        states[pinIndex] = LOW;
-        digitalWrite(pins[pinIndex], states[pinIndex]);
-    }
+void Car::switchOff(int pinIndex)
+{
+    states[pinIndex] = LOW;
+    digitalWrite(pins[pinIndex], states[pinIndex]);
+}
 
-    void switchAllOff()
+void Car::switchAllOff()
+{
+    for (int i : this->pins)
     {
-        for (int i = 0; i < this.pinsCount; i++)
-        {
-            switchOff(i);
-        }
+        switchOff(pins[i]);
     }
-};
+}
+

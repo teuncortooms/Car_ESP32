@@ -1,55 +1,45 @@
-#include <Arduino.h>
+#include "SerialMessenger.h"
 
-class SerialMessenger
+SerialMessenger::SerialMessenger()
 {
+    _inputString = "";
+    _stringComplete = false;
+    _endMarker = '#';
+    _inputString.reserve(200);
+}
 
-    String _inputString;
-    bool _stringComplete;
-    char _endMarker;
+char SerialMessenger::GetEndMarker()
+{
+    return _endMarker;
+}
 
-public:
-    SerialMessenger()
+String SerialMessenger::GetMessage()
+{
+    getInput();
+    return handleInput();
+}
+
+void SerialMessenger::getInput()
+{
+    if (Serial.available())
     {
+        char c = (char)Serial.read();
+        if (c == _endMarker)
+            _stringComplete = true;
+        else
+            _inputString += c;
+    }
+}
+
+String SerialMessenger::handleInput()
+{
+    if (_stringComplete)
+    {
+        String returnvalue = _inputString;
         _inputString = "";
         _stringComplete = false;
-        _endMarker = '#';
-        _inputString.reserve(200);
+        return returnvalue;
     }
-
-    char GetEndMarker()
-    {
-        return _endMarker;
-    }
-
-    String GetMessage()
-    {
-        getInput();
-        return handleInput();
-    }
-
-private:
-    void getInput()
-    {
-        if (Serial.available())
-        {
-            char c = (char)Serial.read();
-            if (c == _endMarker)
-                _stringComplete = true;
-            else
-                _inputString += c;
-        }
-    }
-
-    String handleInput()
-    {
-        if (_stringComplete)
-        {
-            String returnvalue = _inputString;
-            _inputString = "";
-            _stringComplete = false;
-            return returnvalue;
-        }
-        else
-            return "";
-    }
-};
+    else
+        return "";
+}

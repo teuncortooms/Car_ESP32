@@ -1,7 +1,7 @@
 #include <Arduino.h>
-#include <CarController.cpp>
-#include <WifiMessenger.cpp>
-#include <WifiPrinter.cpp>
+#include <CarController.h>
+#include <WifiMessenger.h>
+#include <WifiPrinter.h>
 #include "WiFi.h"
 
 const char *ssid = "Teun";
@@ -31,5 +31,5 @@ void loop()
   String message = _wifiMessenger.GetMessage();
   if (message != "")
     Serial.println(message);
-  _carController.Enforce(message);
+  _carController.Exec(message);
 }
