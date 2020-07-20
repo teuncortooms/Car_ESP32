@@ -2,80 +2,78 @@
 
 Car::Car(int LeftAcceleratePin, int LeftReversePin, int RightAcceleratePin, int RightReversePin)
 {
-    this->indexLeftAccelerate = 0;
-    this->indexLeftReverse = 1;
-    this->indexRightAccelerate = 2;
-    this->indexRightReverse = 3;
-    this->pins[indexLeftAccelerate] = LeftAcceleratePin;
-    this->pins[indexLeftReverse] = LeftReversePin;
-    this->pins[indexRightAccelerate] = RightAcceleratePin;
-    this->pins[indexRightReverse] = RightReversePin;
-    for (int index : this->states)
-    {
-        this->states[index] = LOW;
-    }
+    this->LeftAccelerate = LeftAcceleratePin;
+    this->LeftReverse = LeftReversePin;
+    this->RightAccelerate = RightAcceleratePin;
+    this->RightReverse = RightReversePin;
     setup();
-}
-
-void Car::GoUp()
-{
-    switchAllOff();
-    switchOn(this->indexLeftAccelerate);
-    switchOn(this->indexRightAccelerate);
-}
-
-void Car::GoDown()
-{
-    switchAllOff();
-    switchOn(this->indexLeftReverse);
-    switchOn(this->indexRightReverse);
-}
-
-void Car::GoLeft()
-{
-    switchAllOff();
-    switchOn(this->indexRightAccelerate);
-    switchOn(this->indexLeftReverse);
-}
-
-void Car::GoRight()
-{
-    switchAllOff();
-    switchOn(this->indexRightReverse);
-    switchOn(this->indexLeftAccelerate);
 }
 
 void Car::setup()
 {
-    for (int index : this->pins)
-    {
-        pinMode(index, OUTPUT);
-    }
+    pinMode(this->LeftAccelerate, OUTPUT);
+    pinMode(this->LeftReverse, OUTPUT);
+    pinMode(this->RightAccelerate, OUTPUT);
+    pinMode(this->RightReverse, OUTPUT);
 }
 
-void Car::togglePin(int pinIndex)
+void Car::GoUp()
 {
-    this->states[pinIndex] = !this->states[pinIndex];
-    digitalWrite(this->pins[pinIndex], this->states[pinIndex]);
+    Stop();
+    switchOn(this->LeftAccelerate);
+    switchOn(this->RightAccelerate);
+    Serial.println("going up");
+    Serial.println(digitalRead(18));
+    Serial.println(digitalRead(22));
 }
 
-void Car::switchOn(int pinIndex)
+void Car::GoDown()
 {
-    this->states[pinIndex] = HIGH;
-    digitalWrite(this->pins[pinIndex], this->states[pinIndex]);
+    Stop();
+    switchOn(this->LeftReverse);
+    switchOn(this->RightReverse);
+    Serial.println("going down");
+    Serial.println(digitalRead(18));
+    Serial.println(digitalRead(22));
 }
 
-void Car::switchOff(int pinIndex)
+void Car::GoLeft()
 {
-    states[pinIndex] = LOW;
-    digitalWrite(pins[pinIndex], states[pinIndex]);
+    Stop();
+    switchOn(this->RightAccelerate);
+    switchOn(this->LeftReverse);
+    Serial.println("going left");
+    Serial.println(digitalRead(18));
+    Serial.println(digitalRead(22));
 }
 
-void Car::switchAllOff()
+void Car::GoRight()
 {
-    for (int i : this->pins)
-    {
-        switchOff(pins[i]);
-    }
+    Stop();
+    switchOn(this->RightReverse);
+    switchOn(this->LeftAccelerate);
+    Serial.println("going right");
+    Serial.println(digitalRead(18));
+    Serial.println(digitalRead(22));
 }
 
+void Car::Stop()
+{
+    switchOff(this->LeftAccelerate);
+    switchOff(this->LeftReverse);
+    switchOff(this->RightAccelerate);
+    switchOff(this->RightReverse);
+    Serial.println("stopped");
+    Serial.println(digitalRead(18));
+    Serial.println(digitalRead(22));
+}
+
+void Car::switchOn(int pin)
+{
+    digitalWrite(pin, HIGH);
+}
+
+void Car::switchOff(int pin)
+{
+    digitalWrite(pin, LOW);
+}
