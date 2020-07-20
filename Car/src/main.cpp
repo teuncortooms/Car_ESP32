@@ -3,11 +3,12 @@
 #include <WifiMessenger.h>
 #include <WifiPrinter.h>
 #include "WiFi.h"
+#include "config.h"
 
-const char *ssid = "Teun";
-const char *password = "jezes666";
+const char *ssid = WIFI_SSID;
+const char *password = WIFI_PASSWORD;
 
-CarController _carController;
+CarController _carController(CAR_ACCELERATELEFT, CAR_REVERSELEFT, CAR_ACCELERATERIGHT, CAR_REVERSERIGHT);
 WifiMessenger _wifiMessenger;
 WifiPrinter _wifiPrinter;
 
@@ -30,6 +31,7 @@ void loop()
 {
   String message = _wifiMessenger.GetMessage();
   if (message != "")
-    Serial.println(message);
-  _carController.Exec(message);
+  {
+    _carController.Exec(message);
+  }
 }
