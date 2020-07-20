@@ -60,6 +60,7 @@ void WifiMessenger::sendNewPage()
     _client.println("<center><input type=button value='GO UP' onmousedown=location.href='/?GO_UP'></center><br/>");
     _client.println("<center><input type=button value='GO LEFT' onmousedown=location.href='/?GO_LEFT'><input type=button value='GO RIGHT' onmousedown=location.href='/?GO_RIGHT'></center><br/>");
     _client.println("<center><input type=button value='GO DOWN' onmousedown=location.href='/?GO_DOWN'></center><br/><br/>");
+    _client.println("<center><input type=button value='STOP' onmousedown=location.href='/?STOP'></center><br/><br/>");
     _client.println("<hr/>");
     _client.println("</body>");
     _client.println("</html>");
