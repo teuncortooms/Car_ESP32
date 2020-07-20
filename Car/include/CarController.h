@@ -6,11 +6,10 @@
 
 class CarController
 {
-    int _counter;
     Car _car;
 
 public:
-    CarController();
+    CarController(int LeftAcceleratePin, int LeftReversePin, int RightAcceleratePin, int RightReversePin);
     void Exec(String message);
 };
 
