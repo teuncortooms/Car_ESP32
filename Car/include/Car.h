@@ -5,12 +5,10 @@
 
 class Car
 {
-    int indexLeftAccelerate;
-    int indexLeftReverse;
-    int indexRightAccelerate;
-    int indexRightReverse;
-    int pins[4];
-    int states[4];
+    int LeftAccelerate;
+    int LeftReverse;
+    int RightAccelerate;
+    int RightReverse;
 
 public:
     Car(int LeftAcceleratePin, int LeftReversePin, int RightAcceleratePin, int RightReversePin);
@@ -18,13 +16,12 @@ public:
     void GoDown();
     void GoLeft();
     void GoRight();
+    void Stop();
 
 private:
     void setup();
-    void togglePin(int pinIndex);
-    void switchOn(int pinIndex);
-    void switchOff(int pinIndex);
-    void switchAllOff();
+    void switchOn(int pin);
+    void switchOff(int pin);
 };
 
 #endif
