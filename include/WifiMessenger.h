@@ -2,7 +2,7 @@
 #define WifiMessenger_h
 
 #include <Arduino.h>
-#include "WiFi.h"
+#include <WiFi.h>
 
 class WifiMessenger
 {
@@ -19,10 +19,8 @@ public:
 
 private:
     void getInput();
-    void sendNewPage();
+    void sendHtmlPage();
     String handleInput();
 };
-
-
 
 #endif

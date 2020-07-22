@@ -35,7 +35,7 @@ void WifiMessenger::getInput()
                 if (c == _endMarker)
                 {
                     _messageIsComplete = true;
-                    sendNewPage();
+                    sendHtmlPage();
                     _client.stop();
                 }
                 else
@@ -47,23 +47,59 @@ void WifiMessenger::getInput()
     }
 }
 
-void WifiMessenger::sendNewPage()
+void WifiMessenger::sendHtmlPage()
 {
+    String htmlPage = R"HTMLPAGE(
+            <!DOCTYPE HTML>
+            <html>
+            <head>
+                <meta http-equiv="content-type" content="text/html;charset=UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+                <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+                <title>Wifi Robot</title>
+            </head>
+
+            <body>
+                <div class="container">
+                    <h1>Wifi Robot</h1>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <input type=button class="btn btn-default btn-lg btn-block" value='UP' onmousedown=location.href='/?GO_UP'>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <input type=button class="btn btn-default btn-lg btn-block" value='LEFT' onmousedown=location.href='/?GO_LEFT'>
+                        </div>
+                        <div class="col-xs-6">
+                            <input type=button class="btn btn-default btn-lg btn-block" value='RIGHT' onmousedown=location.href='/?GO_RIGHT'>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <input type=button class="btn btn-default btn-lg btn-block" value='DOWN' onmousedown=location.href='/?GO_DOWN'>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <br/>
+                            <input type=button class="btn btn-default btn-lg btn-block" value='STOP' onmousedown=location.href='/?STOP'>
+                        </div>
+                    </div>
+                </div>
+            </body>
+            </html>
+        )HTMLPAGE";
+
+    // HTTP headers always start with a response code (e.g. HTTP/1.1 200 OK)
+    // and a content-type so the client knows what's coming, then a blank line:
     _client.println("HTTP/1.1 200 OK");
     _client.println("Content-Type: text/html");
-    _client.println("Connection: close"); // the connection will be closed after completion of the response
-    //_client.println("Refresh: 5");  // refresh the page automatically every 5 sec
+    _client.println("Connection: close");
     _client.println();
-    _client.println("<!DOCTYPE HTML>");
-    _client.println("<head><title>WiFi Robot</title></head>");
-    _client.println("<center><hr/><p> Click the Buttons to move the robot <p/><hr/></center>");
-    _client.println("<center><input type=button value='GO UP' onmousedown=location.href='/?GO_UP'></center><br/>");
-    _client.println("<center><input type=button value='GO LEFT' onmousedown=location.href='/?GO_LEFT'><input type=button value='GO RIGHT' onmousedown=location.href='/?GO_RIGHT'></center><br/>");
-    _client.println("<center><input type=button value='GO DOWN' onmousedown=location.href='/?GO_DOWN'></center><br/><br/>");
-    _client.println("<center><input type=button value='STOP' onmousedown=location.href='/?STOP'></center><br/><br/>");
-    _client.println("<hr/>");
-    _client.println("</body>");
-    _client.println("</html>");
+    _client.print(htmlPage);
 }
 
 String WifiMessenger::handleInput()
