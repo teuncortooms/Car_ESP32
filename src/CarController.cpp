@@ -1,7 +1,23 @@
 #include "CarController.h"
 
-CarController::CarController(int LeftAcceleratePin, int LeftReversePin, int RightAcceleratePin, int RightReversePin)
-    : _car(LeftAcceleratePin, LeftReversePin, RightAcceleratePin, RightReversePin)
+CarController::CarController(
+    int LeftAcceleratePin,
+    int LeftReversePin,
+    int LeftSpeedPin,
+    int LeftSpeedPwmChannel,
+    int RightAcceleratePin,
+    int RightReversePin,
+    int RightSpeedPin,
+    int RightSpeedPwmChannel)
+    : _car(
+          LeftAcceleratePin,
+          LeftReversePin,
+          LeftSpeedPin,
+          LeftSpeedPwmChannel,
+          RightAcceleratePin,
+          RightReversePin,
+          RightSpeedPin,
+          RightSpeedPwmChannel)
 {
 }
 
