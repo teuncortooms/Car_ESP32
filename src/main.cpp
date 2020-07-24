@@ -7,7 +7,15 @@
 #include <DS4Messenger.h>
 #include "config.h"
 
-CarController _carController(CAR_ACCELERATELEFT, CAR_REVERSELEFT, CAR_ACCELERATERIGHT, CAR_REVERSERIGHT);
+CarController _carController(
+    CAR_LEFT_ACCELERATEPIN,
+    CAR_LEFT_REVERSEPIN,
+    CAR_LEFT_SPEEDPIN,
+    CAR_LEFT_SPEEDCHANNEL,
+    CAR_RIGHT_ACCELERATEPIN,
+    CAR_RIGHT_REVERSEPIN,
+    CAR_RIGHT_SPEEDPIN,
+    CAR_RIGHT_SPEEDCHANNEL);
 WifiPrinter _wifiPrinter;
 SerialMessenger _serialMessenger;
 WifiMessenger _wifiMessenger;
@@ -29,8 +37,10 @@ void setup()
 void loop()
 {
   String message = _serialMessenger.GetMessage();
-  if(message.isEmpty()) message = _wifiMessenger.GetMessage();
-  if(message.isEmpty()) message = _DS4Messenger.GetMessage();
+  if (message.isEmpty())
+    message = _wifiMessenger.GetMessage();
+  if (message.isEmpty())
+    message = _DS4Messenger.GetMessage();
 
   _carController.Exec(message);
 }
