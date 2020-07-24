@@ -18,7 +18,7 @@ public:
     String GetMessage();
 
 private:
-    void getInput();
+    void getInputFromHtmlPage();
     void sendHtmlPage();
     String handleInput();
 };

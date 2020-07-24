@@ -7,8 +7,6 @@
 class WifiPrinter
 {
 public:
-    void printConnecting(String ssid);
-    void printSuccess();
     void printStatus();
 };
 

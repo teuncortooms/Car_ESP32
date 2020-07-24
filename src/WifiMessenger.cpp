@@ -11,15 +11,16 @@ void WifiMessenger::Setup()
 {
     _message.reserve(200);
     _server.begin();
+    Serial.println("Wifi control initialised.");
 }
 
 String WifiMessenger::GetMessage()
 {
-    getInput();
+    getInputFromHtmlPage();
     return handleInput();
 }
 
-void WifiMessenger::getInput()
+void WifiMessenger::getInputFromHtmlPage()
 {
     if (!_client)
     {

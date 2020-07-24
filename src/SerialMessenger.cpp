@@ -8,6 +8,10 @@ SerialMessenger::SerialMessenger()
     _inputString.reserve(200);
 }
 
+void SerialMessenger::Setup(){
+    Serial.println("Serial control initialised.");
+}
+
 char SerialMessenger::GetEndMarker()
 {
     return _endMarker;

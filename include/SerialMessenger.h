@@ -11,6 +11,7 @@ class SerialMessenger
 
 public:
     SerialMessenger();
+    void Setup();
     char GetEndMarker();
     String GetMessage();
 

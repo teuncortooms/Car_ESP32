@@ -1,16 +1,5 @@
 #include "WifiPrinter.h"
 
-void WifiPrinter::printConnecting(String ssid)
-{
-    Serial.print("Connecting to SSID: ");
-    Serial.println(ssid);
-}
-
-void WifiPrinter::printSuccess()
-{
-    Serial.println("Connected to the WiFi network");
-}
-
 void WifiPrinter::printStatus()
 {
     // print the SSID of the network you're attached to:
