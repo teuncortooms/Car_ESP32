@@ -1,79 +1,64 @@
 #include "Car.h"
 
-Car::Car(int LeftAcceleratePin, int LeftReversePin, int RightAcceleratePin, int RightReversePin)
+Car::Car(
+    int LeftAcceleratePin,
+    int LeftReversePin,
+    int LeftSpeedPin,
+    int LeftSpeedPwmChannel,
+    int RightAcceleratePin,
+    int RightReversePin,
+    int RightSpeedPin,
+    int RightSpeedPwmChannel)
+    : LeftMotor(LeftAcceleratePin, LeftReversePin, LeftSpeedPin, LeftSpeedPwmChannel),
+      RightMotor(RightAcceleratePin, RightReversePin, RightSpeedPin, RightSpeedPwmChannel)
 {
-    this->LeftAccelerate = LeftAcceleratePin;
-    this->LeftReverse = LeftReversePin;
-    this->RightAccelerate = RightAcceleratePin;
-    this->RightReverse = RightReversePin;
-    setup();
-}
-
-void Car::setup()
-{
-    pinMode(this->LeftAccelerate, OUTPUT);
-    pinMode(this->LeftReverse, OUTPUT);
-    pinMode(this->RightAccelerate, OUTPUT);
-    pinMode(this->RightReverse, OUTPUT);
+    LeftMotor.Setup();
+    RightMotor.Setup();
 }
 
 void Car::GoUp()
 {
-    Stop();
-    switchOn(this->LeftAccelerate);
-    switchOn(this->RightAccelerate);
+    LeftMotor.Accelerate();
+    RightMotor.Accelerate();
     Serial.println("going up");
-    Serial.println(digitalRead(18));
-    Serial.println(digitalRead(22));
 }
 
 void Car::GoDown()
 {
-    Stop();
-    switchOn(this->LeftReverse);
-    switchOn(this->RightReverse);
+    LeftMotor.Reverse();
+    RightMotor.Reverse();
     Serial.println("going down");
-    Serial.println(digitalRead(18));
-    Serial.println(digitalRead(22));
 }
 
 void Car::GoLeft()
 {
-    Stop();
-    switchOn(this->RightAccelerate);
-    switchOn(this->LeftReverse);
+    LeftMotor.Reverse();
+    RightMotor.Accelerate();
     Serial.println("going left");
-    Serial.println(digitalRead(18));
-    Serial.println(digitalRead(22));
 }
 
 void Car::GoRight()
 {
-    Stop();
-    switchOn(this->RightReverse);
-    switchOn(this->LeftAccelerate);
+    LeftMotor.Accelerate();
+    RightMotor.Reverse();
     Serial.println("going right");
-    Serial.println(digitalRead(18));
-    Serial.println(digitalRead(22));
 }
 
 void Car::Stop()
 {
-    switchOff(this->LeftAccelerate);
-    switchOff(this->LeftReverse);
-    switchOff(this->RightAccelerate);
-    switchOff(this->RightReverse);
+    LeftMotor.Stop();
+    RightMotor.Stop();
     Serial.println("stopped");
-    Serial.println(digitalRead(18));
-    Serial.println(digitalRead(22));
 }
 
-void Car::switchOn(int pin)
+void Car::SetSpeed(int speed)
 {
-    digitalWrite(pin, HIGH);
+    LeftMotor.SetSpeed(speed);
+    RightMotor.SetSpeed(speed);
 }
 
-void Car::switchOff(int pin)
+void Car::AdjustSpeed(int increment)
 {
-    digitalWrite(pin, LOW);
+    LeftMotor.AdjustSpeed(increment);
+    RightMotor.AdjustSpeed(increment);
 }
