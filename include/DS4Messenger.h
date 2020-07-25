@@ -6,11 +6,11 @@
 
 class DS4Messenger
 {
+
 public:
-    void Setup(char* ps4Mac);
+    void Setup(char *ps4Mac);
     void WaitForController();
     String GetMessage();
 };
-
 
 #endif

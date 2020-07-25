@@ -2,13 +2,13 @@
 
 SerialMessenger::SerialMessenger()
 {
-    _inputString = "";
-    _stringComplete = false;
+    _partialMessage = "";
     _endMarker = '#';
-    _inputString.reserve(200);
+    _partialMessage.reserve(200);
 }
 
-void SerialMessenger::Setup(){
+void SerialMessenger::Setup()
+{
     Serial.println("Serial control initialised.");
 }
 
@@ -19,31 +19,18 @@ char SerialMessenger::GetEndMarker()
 
 String SerialMessenger::GetMessage()
 {
-    getInput();
-    return handleInput();
-}
 
-void SerialMessenger::getInput()
-{
     if (Serial.available())
     {
         char c = (char)Serial.read();
         if (c == _endMarker)
-            _stringComplete = true;
+        {
+            String completeMessage = _partialMessage;
+            _partialMessage = "";
+            return completeMessage;
+        }
         else
-            _inputString += c;
+            _partialMessage += c;
     }
-}
-
-String SerialMessenger::handleInput()
-{
-    if (_stringComplete)
-    {
-        String returnvalue = _inputString;
-        _inputString = "";
-        _stringComplete = false;
-        return returnvalue;
-    }
-    else
-        return "";
+    return String();
 }

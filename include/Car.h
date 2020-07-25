@@ -6,8 +6,9 @@
 
 class Car
 {
-    Motor LeftMotor;
-    Motor RightMotor;
+    Motor leftMotor;
+    Motor rightMotor;
+    int speed;
 
 public:
     Car(
@@ -24,6 +25,7 @@ public:
     void GoLeft();
     void GoRight();
     void Stop();
+    int GetSpeed();
     void SetSpeed(int speed);
     void AdjustSpeed(int increment);
 };

@@ -18,22 +18,16 @@ void DS4Messenger::WaitForController()
 
 String DS4Messenger::GetMessage()
 {
-    String message = "";
     if (PS4.isConnected())
     {
         if (PS4.data.button.up)
-            // Serial.println("Up Button");
-            message = "Up";
+            return "Up";
         if (PS4.data.button.down)
-            // Serial.println("Down Button");
-            message = "Down";
+            return "Down";
         if (PS4.data.button.left)
-            // Serial.println("Left Button");
-            message = "Left";
+            return "Left";
         if (PS4.data.button.right)
-            // Serial.println("Right Button");
-            message = "Right";
-
+            return "Right";
         if (PS4.data.button.upright)
             Serial.println("Up Right");
         if (PS4.data.button.upleft)
@@ -50,8 +44,7 @@ String DS4Messenger::GetMessage()
         if (PS4.data.button.cross)
             Serial.println("Cross Button");
         if (PS4.data.button.square)
-            // Serial.println("Square Button");
-            message = "Stop";
+            return "Stop";
 
         if (PS4.data.button.l1)
             Serial.println("l1 Button");
@@ -106,11 +99,11 @@ String DS4Messenger::GetMessage()
         // }
 
         if (PS4.data.status.charging)
-            Serial.println("The controller is charging");
+            Serial.println("The Messenger is charging");
         if (PS4.data.status.audio)
-            Serial.println("The controller has headphones attached");
+            Serial.println("The Messenger has headphones attached");
         if (PS4.data.status.mic)
-            Serial.println("The controller has a mic attached");
+            Serial.println("The Messenger has a mic attached");
 
         // Serial.print("Battery Percent : ");
         // Serial.println(PS4.data.status.battery, DEC);
@@ -120,5 +113,5 @@ String DS4Messenger::GetMessage()
         // Remove it when you're not trying to see the output
         // delay(1000);
     }
-    return message;
+    return String();
 }

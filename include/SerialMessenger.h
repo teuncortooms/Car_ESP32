@@ -5,8 +5,7 @@
 
 class SerialMessenger
 {
-    String _inputString;
-    bool _stringComplete;
+    String _partialMessage;
     char _endMarker;
 
 public:
@@ -14,11 +13,6 @@ public:
     void Setup();
     char GetEndMarker();
     String GetMessage();
-
-private:
-    void getInput();
-    String handleInput();
 };
-
 
 #endif
