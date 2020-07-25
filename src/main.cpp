@@ -3,9 +3,7 @@
 #include <WifiPrinter.h>
 #include <Car.h>
 #include <CarController.h>
-#include <SerialMessenger.h>
 #include <WebMessenger.h>
-#include <DS4Messenger.h>
 #include "config.h"
 
 Car _car(
@@ -19,9 +17,7 @@ Car _car(
     CAR_RIGHT_SPEEDCHANNEL);
 CarController _carController(_car);
 WifiPrinter _wifiPrinter;
-SerialMessenger _serialMessenger;
 WebMessenger _webMessenger(_car);
-DS4Messenger _DS4Messenger;
 
 void setup()
 {
@@ -34,18 +30,11 @@ void setup()
   }
   _wifiPrinter.printStatus();
 
-  _serialMessenger.Setup();
   _webMessenger.Setup();
-  _DS4Messenger.Setup(PS4_MAC);
 }
 
 void loop()
 {
-  String message = _serialMessenger.GetMessage();
-  if (message.isEmpty())
-    message = _webMessenger.GetMessage();
-  if (message.isEmpty())
-    message = _DS4Messenger.GetMessage();
-
+  String message = _webMessenger.GetMessage();
   _carController.Exec(message);
 }
