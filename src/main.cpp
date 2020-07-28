@@ -2,8 +2,7 @@
 #include <Wifi.h>
 #include <WifiPrinter.h>
 #include <Car.h>
-#include <CarController.h>
-#include <WebMessenger.h>
+#include <WebController.h>
 #include "config.h"
 
 Car _car(
@@ -14,10 +13,11 @@ Car _car(
     CAR_RIGHT_ACCELERATEPIN,
     CAR_RIGHT_REVERSEPIN,
     CAR_RIGHT_SPEEDPIN,
-    CAR_RIGHT_SPEEDCHANNEL);
-CarController _carController(_car);
+    CAR_RIGHT_SPEEDCHANNEL,
+    CAR_MINSPEED,
+    CAR_MAXSPEED);
 WifiPrinter _wifiPrinter;
-WebMessenger _webMessenger(_car);
+WebController _webController(_car);
 
 void setup()
 {
@@ -30,11 +30,9 @@ void setup()
   }
   _wifiPrinter.printStatus();
 
-  _webMessenger.Setup();
+  _webController.Setup();
 }
 
 void loop()
 {
-  String message = _webMessenger.GetMessage();
-  _carController.Exec(message);
 }

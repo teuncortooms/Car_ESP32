@@ -1,23 +1,20 @@
-#ifndef WebMessenger_h
-#define WebMessenger_h
+#ifndef WebController_h
+#define WebController_h
 
 #include <Arduino.h>
 #include <WiFi.h>
 #include <ESPAsyncWebServer.h>
 #include <SPIFFS.h>
-#include <CircularBuffer.h>
 #include <Car.h>
 
-class WebMessenger
+class WebController
 {
     AsyncWebServer _server;
-    CircularBuffer<String, 10> _messageQueue;
     Car &_car;
 
 public:
-    WebMessenger(Car &car);
+    WebController(Car &car);
     void Setup();
-    String GetMessage();
 
 private:
     void configureRoutes();
