@@ -30,6 +30,8 @@ public:
     void GoRight();
     void Stop();
     int GetSpeed();
+    int GetMinSpeed();
+    int GetMaxSpeed();
     void SetSpeed(int speed);
     void AdjustSpeed(int increment);
     void LeftMotorUp(int speed);

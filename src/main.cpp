@@ -1,8 +1,7 @@
 #include <Arduino.h>
 #include <Wifi.h>
 #include <Car.h>
-#include <CarController.h>
-#include <DS4Messenger.h>
+#include <DS4CarController.h>
 #include "config.h"
 
 Car _car(
@@ -16,17 +15,16 @@ Car _car(
     CAR_RIGHT_SPEEDCHANNEL,
     CAR_MINSPEED,
     CAR_MAXSPEED);
-CarController _carController(_car);
-DS4Messenger _DS4Messenger;
+DS4CarController _DS4CarController(_car);
 
 void setup()
 {
   Serial.begin(115200);
-  _DS4Messenger.Setup(PS4_MAC);
+  _DS4CarController.Setup(PS4_MAC);
 }
 
 void loop()
 {
-  String message = _DS4Messenger.GetMessage();
-  _carController.Exec(message);
+  _DS4CarController.WaitForController();
+  _DS4CarController.HandleInput();
 }

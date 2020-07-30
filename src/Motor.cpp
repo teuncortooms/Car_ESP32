@@ -35,9 +35,13 @@ void Motor::Accelerate()
 
 void Motor::Accelerate(int speed)
 {
+    int savedSpeed = this->speed;
+    Serial.println(this->speed);
     SetSpeed(speed);
+    Serial.println(this->speed);
     Accelerate();
-    SetSpeed(this->speed);
+    SetSpeed(savedSpeed);
+    Serial.println(this->speed);
 }
 
 void Motor::Reverse()
@@ -48,9 +52,10 @@ void Motor::Reverse()
 
 void Motor::Reverse(int speed)
 {
+    int savedSpeed = this->speed;
     SetSpeed(speed);
     Reverse();
-    SetSpeed(this->speed);
+    SetSpeed(savedSpeed);
 }
 
 void Motor::Stop()
@@ -68,7 +73,6 @@ void Motor::SetSpeed(int input)
         newSpeed = maxSpeed;
     else
         newSpeed = input;
-
     this->speed = newSpeed;
     ledcWrite(speedPwmChannel, this->speed);
 }

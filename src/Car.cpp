@@ -37,8 +37,8 @@ void Car::GoDown()
 
 void Car::GoLeft()
 {
-    leftMotor.Reverse(0.7 * this->speed);
-    rightMotor.Accelerate(0.7 * this->speed);
+    leftMotor.Reverse();
+    rightMotor.Accelerate();
     Serial.println("going left");
 }
 
@@ -53,12 +53,21 @@ void Car::Stop()
 {
     leftMotor.Stop();
     rightMotor.Stop();
-    Serial.println("stopped");
 }
 
 int Car::GetSpeed()
 {
     return this->speed;
+}
+
+int Car::GetMinSpeed()
+{
+    return this->minSpeed;
+}
+
+int Car::GetMaxSpeed()
+{
+    return this->maxSpeed;
 }
 
 void Car::SetSpeed(int input)
