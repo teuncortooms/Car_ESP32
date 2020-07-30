@@ -16,7 +16,8 @@ Car _car(
     CAR_RIGHT_SPEEDCHANNEL,
     CAR_MINSPEED,
     CAR_MAXSPEED);
-DS4Controller _DS4Controller(_car);
+CarController _carController(_car);
+DS4Messenger _DS4Messenger;
 
 void setup()
 {
