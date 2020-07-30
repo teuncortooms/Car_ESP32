@@ -37,8 +37,8 @@ void Car::GoDown()
 
 void Car::GoLeft()
 {
-    leftMotor.Reverse();
-    rightMotor.Accelerate();
+    leftMotor.Reverse(0.7 * this->speed);
+    rightMotor.Accelerate(0.7 * this->speed);
     Serial.println("going left");
 }
 
@@ -80,4 +80,24 @@ void Car::AdjustSpeed(int increment)
 {
     int newSpeed = this->speed + increment;
     SetSpeed(newSpeed);
+}
+
+void Car::LeftMotorUp(int speed)
+{
+    leftMotor.Accelerate(speed);
+}
+
+void Car::LeftMotorDown(int speed)
+{
+    leftMotor.Reverse(speed);
+}
+
+void Car::RightMotorUp(int speed)
+{
+    rightMotor.Accelerate(speed);
+}
+
+void Car::RightMotorDown(int speed)
+{
+    rightMotor.Reverse(speed);
 }

@@ -13,9 +13,10 @@ Car _car(
     CAR_RIGHT_ACCELERATEPIN,
     CAR_RIGHT_REVERSEPIN,
     CAR_RIGHT_SPEEDPIN,
-    CAR_RIGHT_SPEEDCHANNEL);
-CarController _carController(_car);
-DS4Messenger _DS4Messenger;
+    CAR_RIGHT_SPEEDCHANNEL,
+    CAR_MINSPEED,
+    CAR_MAXSPEED);
+DS4Controller _DS4Controller(_car);
 
 void setup()
 {

@@ -32,6 +32,10 @@ public:
     int GetSpeed();
     void SetSpeed(int speed);
     void AdjustSpeed(int increment);
+    void LeftMotorUp(int speed);
+    void LeftMotorDown(int speed);
+    void RightMotorUp(int speed);
+    void RightMotorDown(int speed);
 };
 
 #endif

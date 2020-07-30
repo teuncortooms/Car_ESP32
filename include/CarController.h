@@ -7,9 +7,10 @@
 class CarController
 {
     Car _car;
+    String previousMessage;
 
 public:
-    CarController(Car& car);
+    CarController(Car &car);
     void Exec(String message);
 };
 

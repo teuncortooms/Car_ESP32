@@ -33,10 +33,24 @@ void Motor::Accelerate()
     digitalWrite(reversePin, LOW);
 }
 
+void Motor::Accelerate(int speed)
+{
+    SetSpeed(speed);
+    Accelerate();
+    SetSpeed(this->speed);
+}
+
 void Motor::Reverse()
 {
     digitalWrite(acceleratePin, LOW);
     digitalWrite(reversePin, HIGH);
+}
+
+void Motor::Reverse(int speed)
+{
+    SetSpeed(speed);
+    Reverse();
+    SetSpeed(this->speed);
 }
 
 void Motor::Stop()

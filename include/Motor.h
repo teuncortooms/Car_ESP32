@@ -17,7 +17,9 @@ public:
     Motor(int acceleratePin, int reversePin, int speedPin, int speedPwmChannel, int minSpeed, int maxSpeed);
     void Setup();
     void Accelerate();
+    void Accelerate(int speed);
     void Reverse();
+    void Reverse(int speed);
     void Stop();
     void SetSpeed(int speed);
     void AdjustSpeed(int increment);
