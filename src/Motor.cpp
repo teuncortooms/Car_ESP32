@@ -37,7 +37,6 @@ void Motor::Accelerate(int tempSpeed)
 {
     int baseSpeed = this->speed;
     SetSpeed(tempSpeed);
-    Serial.println(this->speed);
     Accelerate();
     SetSpeed(baseSpeed);
 }
@@ -48,13 +47,12 @@ void Motor::Reverse()
     digitalWrite(reversePin, HIGH);
 }
 
-void Motor::Reverse(int speed)
+void Motor::Reverse(int tempSpeed)
 {
-    int savedSpeed = this->speed;
-    SetSpeed(speed);
-    Serial.println(this->speed);
+    int baseSpeed = this->speed;
+    SetSpeed(tempSpeed);
     Reverse();
-    SetSpeed(savedSpeed);
+    SetSpeed(baseSpeed);
 }
 
 void Motor::Stop()
