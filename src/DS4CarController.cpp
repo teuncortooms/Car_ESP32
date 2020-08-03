@@ -87,11 +87,11 @@ void DS4CarController::HandleInput()
         // }
 
         if (PS4.data.status.charging)
-            Serial.println("The Messenger is charging");
+            Serial.println("The controller is charging");
         if (PS4.data.status.audio)
-            Serial.println("The Messenger has headphones attached");
+            Serial.println("The controller has headphones attached");
         if (PS4.data.status.mic)
-            Serial.println("The Messenger has a mic attached");
+            Serial.println("The controller has a mic attached");
 
         // Serial.print("Battery Percent : ");
         // Serial.println(PS4.data.status.battery, DEC);
