@@ -122,53 +122,64 @@ void DS4CarController::handleMovement()
         Serial.println("Down Left");
     else if (PS4.data.button.downright)
         Serial.println("Down Right");
-    else if (eitherAnalogStickIsMoved())
+    else if (eitherAnalogStickIsAboveThreshold())
     {
-        Serial.println("handling sticks!");
-        handleAnalogSticks();
+        int ly = PS4.data.analog.stick.ly;
+        int ry = PS4.data.analog.stick.ry;
+        if (abs(ly) > analogStickThreshold)
+            driveLeftMotor(ly);
+        if (abs(ry) > analogStickThreshold)
+            driveRightMotor(ry);
     }
+
     else
-    {
         _car.Stop();
-    }
 }
 
-bool DS4CarController::eitherAnalogStickIsMoved()
+bool DS4CarController::eitherAnalogStickIsAboveThreshold()
 {
-    return (abs(PS4.event.analog_move.stick.lx) > analogStickThreshold ||
-            abs(PS4.event.analog_move.stick.ly) > analogStickThreshold ||
-            abs(PS4.event.analog_move.stick.rx) > analogStickThreshold ||
-            abs(PS4.event.analog_move.stick.ry) > analogStickThreshold);
+    int ly = PS4.data.analog.stick.ly;
+    int ry = PS4.data.analog.stick.ry;
+    return (abs(ly) > analogStickThreshold ||
+            abs(ry) > analogStickThreshold);
 }
 
-void DS4CarController::handleAnalogSticks()
+void DS4CarController::driveLeftMotor(int coord)
 {
-    if (abs(PS4.event.analog_move.stick.ly) > analogStickThreshold)
-        handleAnalogStickY(PS4.event.analog_move.stick.ly, "Left");
-    if (abs(PS4.event.analog_move.stick.ry) > analogStickThreshold)
-        handleAnalogStickY(PS4.event.analog_move.stick.ry, "Right");
-}
-
-void DS4CarController::handleAnalogStickY(int coord, String side)
-{
-    int minCoord = 0;
-    int maxCoord = 127;
-    int speed = map(abs(coord), minCoord, maxCoord, _car.GetMinSpeed(), _car.GetMaxSpeed());
+    int speed = convertCoordToSpeed(coord);
+    Serial.print("speed: ");
     Serial.println(speed);
-    if (coord > analogStickThreshold)
-        activateMotor(side, "Up", speed);
-    if (coord < -analogStickThreshold)
-        activateMotor(side, "Down", speed);
+    driveMotor("Left", speed);
 }
 
-void DS4CarController::activateMotor(String side, String direction, int speed)
+void DS4CarController::driveRightMotor(int coord)
 {
-    if (side == "Left" && direction == "Up")
+    int speed = convertCoordToSpeed(coord);
+    driveMotor("Right", speed);
+}
+
+int DS4CarController::convertCoordToSpeed(int coord)
+{
+    Serial.print("coord: ");
+    Serial.println(coord);
+    
+    int minCoord = 0;
+    int maxCoord = 128;
+    int speed = map(abs(coord), minCoord, maxCoord, _car.GetMinSpeed(), _car.GetMaxSpeed());
+    if (coord < 0)
+        return -speed;
+    else
+        return speed;
+}
+
+void DS4CarController::driveMotor(String side, int speed)
+{
+    if (side == "Left" && speed > 0)
         _car.LeftMotorUp(speed);
-    if (side == "Left" && direction == "Down")
-        _car.LeftMotorDown(speed);
-    if (side == "Right" && direction == "Up")
+    if (side == "Left" && speed < 0)
+        _car.LeftMotorDown(abs(speed));
+    if (side == "Right" && speed > 0)
         _car.RightMotorUp(speed);
-    if (side == "Right" && direction == "Down")
-        _car.RightMotorDown(speed);
+    if (side == "Right" && speed < 0)
+        _car.RightMotorDown(abs(speed));
 }

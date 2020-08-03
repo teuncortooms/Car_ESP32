@@ -18,11 +18,11 @@ public:
 
 private:
     void handleMovement();
-    bool eitherAnalogStickIsMoved();
-    bool noMovementButtonsPressed();
-    void handleAnalogSticks();
-    void handleAnalogStickY(int coord, String motor);
-    void activateMotor(String motor, String direction, int speed);
+    bool eitherAnalogStickIsAboveThreshold();
+    void driveLeftMotor(int coord);
+    void driveRightMotor(int coord);
+    int convertCoordToSpeed(int coord);
+    void driveMotor(String side, int speed);
 };
 
 #endif
