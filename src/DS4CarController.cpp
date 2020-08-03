@@ -37,15 +37,14 @@ void DS4CarController::HandleInput()
         if (PS4.data.button.square)
             _car.Stop();
 
-        if (PS4.data.button.l1)
+        if (PS4.event.button_down.l1)
         {
-            // TODO: add millis check, to gradually process input
             _car.AdjustSpeed(-1);
             Serial.println(_car.GetSpeed());
         }
-        if (PS4.data.button.r1)
+        if (PS4.event.button_down.r1)
         {
-            _car.AdjustSpeed(10);
+            _car.AdjustSpeed(1);
             Serial.println(_car.GetSpeed());
         }
 
