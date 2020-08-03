@@ -18,11 +18,9 @@ public:
 
 private:
     void handleMovement();
-    bool eitherAnalogStickIsAboveThreshold();
-    void driveLeftMotor(int coord);
-    void driveRightMotor(int coord);
+    void driveMotor(String side, int coord);
     int convertCoordToSpeed(int coord);
-    void driveMotor(String side, int speed);
+    bool noMovementButtonsPressed();
 };
 
 #endif

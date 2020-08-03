@@ -107,31 +107,23 @@ void DS4CarController::handleMovement()
 {
     if (PS4.data.button.up)
         _car.GoUp();
-    else if (PS4.data.button.down)
+    if (PS4.data.button.down)
         _car.GoDown();
-    else if (PS4.data.button.left)
+    if (PS4.data.button.left)
         _car.GoLeft();
-    else if (PS4.data.button.right)
+    if (PS4.data.button.right)
         _car.GoRight();
-    else if (PS4.data.button.upleft)
+    if (PS4.data.button.upleft)
         Serial.println("Up Left");
-    else if (PS4.data.button.upright)
+    if (PS4.data.button.upright)
         Serial.println("Up Right");
-    else if (PS4.data.button.downleft)
+    if (PS4.data.button.downleft)
         Serial.println("Down Left");
-    else if (PS4.data.button.downright)
+    if (PS4.data.button.downright)
         Serial.println("Down Right");
-    else if (eitherAnalogStickIsAboveThreshold())
-    {
-        int ly = PS4.data.analog.stick.ly;
-        int ry = PS4.data.analog.stick.ry;
-        if (abs(ly) > analogStickThreshold)
-            driveLeftMotor(ly);
-        if (abs(ry) > analogStickThreshold)
-            driveRightMotor(ry);
-    }
 
-    else
+
+    if (noMovementButtonsPressed())
         _car.Stop();
 }
 
@@ -151,34 +143,33 @@ void DS4CarController::driveLeftMotor(int coord)
     driveMotor("Left", speed);
 }
 
-void DS4CarController::driveRightMotor(int coord)
+void DS4CarController::driveMotor(String side, int coords)
 {
-    int speed = convertCoordToSpeed(coord);
-    driveMotor("Right", speed);
+    int speed = convertCoordToSpeed(coords);
+    _car.DriveMotor(side, speed);
 }
 
 int DS4CarController::convertCoordToSpeed(int coord)
 {
-    Serial.print("coord: ");
-    Serial.println(coord);
+    if (abs(coord) < analogStickThreshold)
+        return 0;
     
-    int minCoord = 0;
-    int maxCoord = 128;
+    int minCoord = analogStickThreshold;
+    int maxCoord = (coord > 0) ? 127 : 128;
     int speed = map(abs(coord), minCoord, maxCoord, _car.GetMinSpeed(), _car.GetMaxSpeed());
-    if (coord < 0)
-        return -speed;
-    else
-        return speed;
+    return (coord > 0) ? speed : -speed;
 }
 
-void DS4CarController::driveMotor(String side, int speed)
+bool DS4CarController::noMovementButtonsPressed()
 {
-    if (side == "Left" && speed > 0)
-        _car.LeftMotorUp(speed);
-    if (side == "Left" && speed < 0)
-        _car.LeftMotorDown(abs(speed));
-    if (side == "Right" && speed > 0)
-        _car.RightMotorUp(speed);
-    if (side == "Right" && speed < 0)
-        _car.RightMotorDown(abs(speed));
+    return (!PS4.data.button.up &&
+            !PS4.data.button.down &&
+            !PS4.data.button.left &&
+            !PS4.data.button.right &&
+            !PS4.data.button.upleft &&
+            !PS4.data.button.upright &&
+            !PS4.data.button.downleft &&
+            !PS4.data.button.downright &&
+            abs(PS4.data.analog.stick.ly) < analogStickThreshold &&
+            abs(PS4.data.analog.stick.ry) < analogStickThreshold);
 }
