@@ -25,28 +25,24 @@ void Car::GoUp()
 {
     leftMotor.Accelerate();
     rightMotor.Accelerate();
-    Serial.println("going up");
 }
 
 void Car::GoDown()
 {
     leftMotor.Reverse();
     rightMotor.Reverse();
-    Serial.println("going down");
 }
 
 void Car::GoLeft()
 {
     leftMotor.Reverse();
     rightMotor.Accelerate();
-    Serial.println("going left");
 }
 
 void Car::GoRight()
 {
     leftMotor.Accelerate();
     rightMotor.Reverse();
-    Serial.println("going right");
 }
 
 void Car::Stop()
@@ -91,22 +87,18 @@ void Car::AdjustSpeed(int increment)
     SetSpeed(newSpeed);
 }
 
-void Car::LeftMotorUp(int speed)
+void Car::DriveMotor(String side, int speed)
 {
-    leftMotor.Accelerate(speed);
-}
-
-void Car::LeftMotorDown(int speed)
-{
-    leftMotor.Reverse(speed);
-}
-
-void Car::RightMotorUp(int speed)
-{
-    rightMotor.Accelerate(speed);
-}
-
-void Car::RightMotorDown(int speed)
-{
-    rightMotor.Reverse(speed);
+    if (side == "Left" && speed == 0)
+        leftMotor.Stop();
+    if (side == "Left" && speed > 0)
+        leftMotor.Accelerate(speed);
+    if (side == "Left" && speed < 0)
+        leftMotor.Reverse(abs(speed));
+    if (side == "Right" && speed == 0)
+        rightMotor.Stop();
+    if (side == "Right" && speed > 0)
+        rightMotor.Accelerate(speed);
+    if (side == "Right" && speed < 0)
+        rightMotor.Reverse(abs(speed));
 }
