@@ -35,14 +35,26 @@ void Car::GoDown()
 
 void Car::GoLeft()
 {
-    leftMotor.Reverse();
+    leftMotor.Stop();
     rightMotor.Accelerate();
 }
 
 void Car::GoRight()
 {
     leftMotor.Accelerate();
-    rightMotor.Reverse();
+    rightMotor.Stop();
+}
+
+void Car::GoUpLeft()
+{
+    leftMotor.Accelerate(0.7 * this->speed);
+    rightMotor.Accelerate();
+}
+
+void Car::GoUpRight()
+{
+    leftMotor.Accelerate();
+    rightMotor.Accelerate(0.7 * this->speed);
 }
 
 void Car::Stop()

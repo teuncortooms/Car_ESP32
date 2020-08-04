@@ -115,8 +115,10 @@ void DS4CarController::handleMovement()
         _car.GoRight();
     if (PS4.data.button.upleft)
         Serial.println("Up Left");
+    // _car.GoUpLeft();
     if (PS4.data.button.upright)
         Serial.println("Up Right");
+    // _car.GoUpRight();
     if (PS4.data.button.downleft)
         Serial.println("Down Left");
     if (PS4.data.button.downright)

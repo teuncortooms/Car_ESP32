@@ -28,6 +28,8 @@ public:
     void GoDown();
     void GoLeft();
     void GoRight();
+    void GoUpLeft();
+    void GoUpRight();
     void Stop();
     int GetSpeed();
     int GetMinSpeed();
