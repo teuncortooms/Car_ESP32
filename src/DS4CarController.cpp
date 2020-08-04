@@ -124,25 +124,28 @@ void DS4CarController::handleMovement()
     if (PS4.data.button.downright)
         Serial.println("Down Right");
 
+    // handleStick("Left", PS4.data.analog.stick.ly);
+    // handleStick("Right", PS4.data.analog.stick.ry);
 
     if (noMovementButtonsPressed())
         _car.Stop();
 }
 
-bool DS4CarController::eitherAnalogStickIsAboveThreshold()
+void DS4CarController::handleStick(String side, int coord)
 {
-    int ly = PS4.data.analog.stick.ly;
-    int ry = PS4.data.analog.stick.ry;
-    return (abs(ly) > analogStickThreshold ||
-            abs(ry) > analogStickThreshold);
-}
-
-void DS4CarController::driveLeftMotor(int coord)
-{
-    int speed = convertCoordToSpeed(coord);
-    Serial.print("speed: ");
-    Serial.println(speed);
-    driveMotor("Left", speed);
+    bool isBelowThreshold = abs(coord) < analogStickThreshold;
+    bool &wasBelowThreshold = (side == "Left") ? wasLYBelowThreshold : wasRYBelowThreshold;
+    // to make sure it doesn't continually break when trying to drive with arrow keys
+    if (isBelowThreshold && !wasBelowThreshold)
+    {
+        driveMotor(side, 0);
+        wasBelowThreshold = true;
+    }
+    else if (!isBelowThreshold)
+    {
+        driveMotor(side, coord);
+        wasBelowThreshold = false;
+    }
 }
 
 void DS4CarController::driveMotor(String side, int coords)
@@ -155,7 +158,7 @@ int DS4CarController::convertCoordToSpeed(int coord)
 {
     if (abs(coord) < analogStickThreshold)
         return 0;
-    
+
     int minCoord = analogStickThreshold;
     int maxCoord = (coord > 0) ? 127 : 128;
     int speed = map(abs(coord), minCoord, maxCoord, _car.GetMinSpeed(), _car.GetMaxSpeed());

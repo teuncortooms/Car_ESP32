@@ -9,6 +9,8 @@ class DS4CarController
 {
     Car _car;
     int analogStickThreshold;
+    bool wasLYBelowThreshold;
+    bool wasRYBelowThreshold;
 
 public:
     DS4CarController(Car &car);
@@ -18,6 +20,7 @@ public:
 
 private:
     void handleMovement();
+    void handleStick(String side, int coords);
     void driveMotor(String side, int coord);
     int convertCoordToSpeed(int coord);
     bool noMovementButtonsPressed();
