@@ -5,17 +5,21 @@
 
 class Motor
 {
-    int AcceleratePin;
-    int ReversePin;
-    int SpeedPin;
-    int SpeedPwmChannel;
-    int Speed;
+    int acceleratePin;
+    int reversePin;
+    int speedPin;
+    int speedPwmChannel;
+    int speed;
+    int minSpeed;
+    int maxSpeed;
 
 public:
-    Motor(int AcceleratePin, int ReversePin, int SpeedPin, int SpeedPwmChannel);
+    Motor(int acceleratePin, int reversePin, int speedPin, int speedPwmChannel, int minSpeed, int maxSpeed);
     void Setup();
     void Accelerate();
+    void Accelerate(int speed);
     void Reverse();
+    void Reverse(int speed);
     void Stop();
     void SetSpeed(int speed);
     void AdjustSpeed(int increment);
