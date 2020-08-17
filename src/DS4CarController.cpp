@@ -74,18 +74,6 @@ void DS4CarController::HandleInput()
             Serial.println(PS4.data.analog.button.r2, DEC);
         }
 
-        // if (PS4.event.analog_move.stick.lx)
-        // {
-        //     Serial.print("Left Stick x at ");
-        //     Serial.println(PS4.data.analog.stick.lx);
-        // }
-
-        // if (PS4.event.analog_move.stick.rx)
-        // {
-        //     Serial.print("Right Stick x at ");
-        //     Serial.println(PS4.data.analog.stick.rx, DEC);
-        // }
-
         if (PS4.data.status.charging)
             Serial.println("The controller is charging");
         if (PS4.data.status.audio)
@@ -107,44 +95,46 @@ void DS4CarController::handleMovement()
 {
     if (PS4.data.button.up)
         _car.GoUp();
-    if (PS4.data.button.down)
+    else if (PS4.data.button.down)
         _car.GoDown();
-    if (PS4.data.button.left)
+    else if (PS4.data.button.left)
         _car.GoLeft();
-    if (PS4.data.button.right)
+    else if (PS4.data.button.right)
         _car.GoRight();
-    if (PS4.data.button.upleft)
-        Serial.println("Up Left");
-    // _car.GoUpLeft();
-    if (PS4.data.button.upright)
-        Serial.println("Up Right");
-    // _car.GoUpRight();
-    if (PS4.data.button.downleft)
-        Serial.println("Down Left");
-    if (PS4.data.button.downright)
-        Serial.println("Down Right");
-
-    // handleStick("Left", PS4.data.analog.stick.ly);
-    // handleStick("Right", PS4.data.analog.stick.ry);
-
-    if (noMovementButtonsPressed())
+    else if (analogSticksMoved())
+        handleAnalogSticks();
+    else
         _car.Stop();
+
+    // if (PS4.data.button.upleft)
+    //     Serial.println("Up Left");
+    // // _car.GoUpLeft();
+    // if (PS4.data.button.upright)
+    //     Serial.println("Up Right");
+    // // _car.GoUpRight();
+    // if (PS4.data.button.downleft)
+    //     Serial.println("Down Left");
+    // if (PS4.data.button.downright)
+    //     Serial.println("Down Right");
+}
+
+bool DS4CarController::analogSticksMoved()
+{
+    return abs(PS4.data.analog.stick.ly) >= analogStickThreshold ||
+           abs(PS4.data.analog.stick.ry) >= analogStickThreshold;
+}
+
+void DS4CarController::handleAnalogSticks()
+{
+    handleStick("Left", PS4.data.analog.stick.ly);
+    handleStick("Right", PS4.data.analog.stick.ry);
 }
 
 void DS4CarController::handleStick(String side, int coord)
 {
-    bool isBelowThreshold = abs(coord) < analogStickThreshold;
-    bool &wasBelowThreshold = (side == "Left") ? wasLYBelowThreshold : wasRYBelowThreshold;
-    // to make sure it doesn't continually break when trying to drive with arrow keys
-    if (isBelowThreshold && !wasBelowThreshold)
-    {
-        driveMotor(side, 0);
-        wasBelowThreshold = true;
-    }
-    else if (!isBelowThreshold)
+    if (abs(coord) > analogStickThreshold)
     {
         driveMotor(side, coord);
-        wasBelowThreshold = false;
     }
 }
 
@@ -163,18 +153,4 @@ int DS4CarController::convertCoordToSpeed(int coord)
     int maxCoord = (coord > 0) ? 127 : 128;
     int speed = map(abs(coord), minCoord, maxCoord, _car.GetMinSpeed(), _car.GetMaxSpeed());
     return (coord > 0) ? speed : -speed;
-}
-
-bool DS4CarController::noMovementButtonsPressed()
-{
-    return (!PS4.data.button.up &&
-            !PS4.data.button.down &&
-            !PS4.data.button.left &&
-            !PS4.data.button.right &&
-            !PS4.data.button.upleft &&
-            !PS4.data.button.upright &&
-            !PS4.data.button.downleft &&
-            !PS4.data.button.downright &&
-            abs(PS4.data.analog.stick.ly) < analogStickThreshold &&
-            abs(PS4.data.analog.stick.ry) < analogStickThreshold);
 }
