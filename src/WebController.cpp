@@ -2,6 +2,7 @@
 
 WebController::WebController(Car &car) : _server(80), _car(car)
 {
+    // Don't forget to upload File System Image
     // issue: initializing _server takes 20% of Flash memory space
 }
 
