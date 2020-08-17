@@ -16,7 +16,6 @@ Car _car(
     CAR_RIGHT_SPEEDCHANNEL,
     CAR_MINSPEED,
     CAR_MAXSPEED);
-WifiPrinter _wifiPrinter;
 WebController _webController(_car);
 
 void setup()
@@ -28,7 +27,7 @@ void setup()
     delay(1000);
     Serial.println("Connecting to WiFi..");
   }
-  _wifiPrinter.printStatus();
+  PrintWifiStatus();
 
   _webController.Setup();
 }

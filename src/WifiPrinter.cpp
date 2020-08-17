@@ -1,6 +1,6 @@
 #include "WifiPrinter.h"
 
-void WifiPrinter::printStatus()
+void PrintWifiStatus()
 {
     // print the SSID of the network you're attached to:
     Serial.print("SSID: ");

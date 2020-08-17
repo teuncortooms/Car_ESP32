@@ -2,7 +2,6 @@
 
 WebController::WebController(Car &car) : _server(80), _car(car)
 {
-    // Don't forget to upload File System Image
     // issue: initializing _server takes 20% of Flash memory space
 }
 
@@ -15,7 +14,10 @@ void WebController::Setup()
     }
     configureRoutes();
     _server.begin();
-    Serial.println("Wifi control initialised.");
+    Serial.println("Web control initialised.");
+    Serial.print("Access controls via http://");
+    Serial.println(WiFi.localIP());
+    Serial.println("Don't forget to upload File System Image!");
 }
 
 void WebController::configureRoutes()

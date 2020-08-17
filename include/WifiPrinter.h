@@ -4,10 +4,6 @@
 #include <Arduino.h>
 #include "WiFi.h"
 
-class WifiPrinter
-{
-public:
-    void printStatus();
-};
+void PrintWifiStatus();
 
 #endif
