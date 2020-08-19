@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include <Wifi.h>
 #include <Car.h>
 #include <DS4CarController.h>
 #include "config.h"
