@@ -1,54 +1,81 @@
 #include "Motor.h"
 
 Motor::Motor(
-    int AcceleratePin,
-    int ReversePin,
-    int SpeedPin,
-    int SpeedPwmChannel)
+    int acceleratePin,
+    int reversePin,
+    int speedPin,
+    int speedPwmChannel,
+    int minSpeed,
+    int maxSpeed)
 {
-    this->AcceleratePin = AcceleratePin;
-    this->ReversePin = ReversePin;
-    this->SpeedPin = SpeedPin;
-    this->SpeedPwmChannel = SpeedPwmChannel;
-    this->Speed = 255;
+    this->acceleratePin = acceleratePin;
+    this->reversePin = reversePin;
+    this->speedPin = speedPin;
+    this->speedPwmChannel = speedPwmChannel;
+    this->speed = maxSpeed;
+    this->minSpeed = minSpeed;
+    this->maxSpeed = maxSpeed;
     Setup();
 }
 
 void Motor::Setup()
 {
-    pinMode(AcceleratePin, OUTPUT);
-    pinMode(ReversePin, OUTPUT);
-    ledcSetup(SpeedPwmChannel, 5000, 8);
-    ledcAttachPin(SpeedPin, SpeedPwmChannel);
-    ledcWrite(SpeedPwmChannel, Speed);
+    pinMode(acceleratePin, OUTPUT);
+    pinMode(reversePin, OUTPUT);
+    ledcSetup(speedPwmChannel, 5000, 8);
+    ledcAttachPin(speedPin, speedPwmChannel);
+    SetSpeed(speed);
 }
 
 void Motor::Accelerate()
 {
-    digitalWrite(AcceleratePin, HIGH);
-    digitalWrite(ReversePin, LOW);
+    digitalWrite(acceleratePin, HIGH);
+    digitalWrite(reversePin, LOW);
+}
+
+void Motor::Accelerate(int tempSpeed)
+{
+    int baseSpeed = this->speed;
+    SetSpeed(tempSpeed);
+    Accelerate();
+    SetSpeed(baseSpeed);
 }
 
 void Motor::Reverse()
 {
-    digitalWrite(AcceleratePin, LOW);
-    digitalWrite(ReversePin, HIGH);
+    digitalWrite(acceleratePin, LOW);
+    digitalWrite(reversePin, HIGH);
+}
+
+void Motor::Reverse(int tempSpeed)
+{
+    int baseSpeed = this->speed;
+    SetSpeed(tempSpeed);
+    Reverse();
+    SetSpeed(baseSpeed);
 }
 
 void Motor::Stop()
 {
-    digitalWrite(AcceleratePin, LOW);
-    digitalWrite(ReversePin, LOW);
+    digitalWrite(acceleratePin, LOW);
+    digitalWrite(reversePin, LOW);
 }
 
-void Motor::SetSpeed(int speed)
+void Motor::SetSpeed(int input)
 {
-    this->Speed = speed;
-    ledcWrite(SpeedPwmChannel, this->Speed);
+    int newSpeed;
+    if (input < minSpeed)
+        newSpeed = minSpeed;
+    else if (input > maxSpeed)
+        newSpeed = maxSpeed;
+    else
+        newSpeed = input;
+    this->speed = newSpeed;
+    ledcWrite(speedPwmChannel, this->speed);
 }
 
 void Motor::AdjustSpeed(int increment)
 {
-    this->Speed += increment;
-    ledcWrite(SpeedPwmChannel, this->Speed);
+    int newSpeed = this->speed + increment;
+    SetSpeed(newSpeed);
 }

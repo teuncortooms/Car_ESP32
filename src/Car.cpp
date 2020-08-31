@@ -1,17 +1,22 @@
 #include "Car.h"
 
 Car::Car(
-    int LeftAcceleratePin,
-    int LeftReversePin,
-    int LeftSpeedPin,
-    int LeftSpeedPwmChannel,
-    int RightAcceleratePin,
-    int RightReversePin,
-    int RightSpeedPin,
-    int RightSpeedPwmChannel)
-    : leftMotor(LeftAcceleratePin, LeftReversePin, LeftSpeedPin, LeftSpeedPwmChannel),
-      rightMotor(RightAcceleratePin, RightReversePin, RightSpeedPin, RightSpeedPwmChannel)
+    int leftAcceleratePin,
+    int leftReversePin,
+    int leftSpeedPin,
+    int leftSpeedPwmChannel,
+    int rightAcceleratePin,
+    int rightReversePin,
+    int rightSpeedPin,
+    int rightSpeedPwmChannel,
+    int minSpeed,
+    int maxSpeed)
+    : leftMotor(leftAcceleratePin, leftReversePin, leftSpeedPin, leftSpeedPwmChannel, minSpeed, maxSpeed),
+      rightMotor(rightAcceleratePin, rightReversePin, rightSpeedPin, rightSpeedPwmChannel, minSpeed, maxSpeed)
 {
+    this->speed = maxSpeed;
+    this->minSpeed = minSpeed;
+    this->maxSpeed = maxSpeed;
     leftMotor.Setup();
     rightMotor.Setup();
 }
@@ -20,35 +25,42 @@ void Car::GoUp()
 {
     leftMotor.Accelerate();
     rightMotor.Accelerate();
-    Serial.println("going up");
 }
 
 void Car::GoDown()
 {
     leftMotor.Reverse();
     rightMotor.Reverse();
-    Serial.println("going down");
 }
 
 void Car::GoLeft()
 {
-    leftMotor.Reverse();
+    leftMotor.Stop();
     rightMotor.Accelerate();
-    Serial.println("going left");
 }
 
 void Car::GoRight()
 {
     leftMotor.Accelerate();
-    rightMotor.Reverse();
-    Serial.println("going right");
+    rightMotor.Stop();
+}
+
+void Car::GoUpLeft()
+{
+    leftMotor.Accelerate(0.7 * this->speed);
+    rightMotor.Accelerate();
+}
+
+void Car::GoUpRight()
+{
+    leftMotor.Accelerate();
+    rightMotor.Accelerate(0.7 * this->speed);
 }
 
 void Car::Stop()
 {
     leftMotor.Stop();
     rightMotor.Stop();
-    Serial.println("stopped");
 }
 
 int Car::GetSpeed()
@@ -56,16 +68,49 @@ int Car::GetSpeed()
     return this->speed;
 }
 
-void Car::SetSpeed(int speed)
+int Car::GetMinSpeed()
 {
-    this->speed = speed;
-    leftMotor.SetSpeed(speed);
-    rightMotor.SetSpeed(speed);
+    return this->minSpeed;
+}
+
+int Car::GetMaxSpeed()
+{
+    return this->maxSpeed;
+}
+
+void Car::SetSpeed(int input)
+{
+    int newSpeed;
+    if (input < minSpeed)
+        newSpeed = minSpeed;
+    else if (input > maxSpeed)
+        newSpeed = maxSpeed;
+    else
+        newSpeed = input;
+
+    this->speed = newSpeed;
+    leftMotor.SetSpeed(newSpeed);
+    rightMotor.SetSpeed(newSpeed);
 }
 
 void Car::AdjustSpeed(int increment)
 {
-    this->speed += increment;
-    leftMotor.AdjustSpeed(increment);
-    rightMotor.AdjustSpeed(increment);
+    int newSpeed = this->speed + increment;
+    SetSpeed(newSpeed);
+}
+
+void Car::DriveMotor(String side, int speed)
+{
+    if (side == "Left" && speed == 0)
+        leftMotor.Stop();
+    if (side == "Left" && speed > 0)
+        leftMotor.Accelerate(speed);
+    if (side == "Left" && speed < 0)
+        leftMotor.Reverse(abs(speed));
+    if (side == "Right" && speed == 0)
+        rightMotor.Stop();
+    if (side == "Right" && speed > 0)
+        rightMotor.Accelerate(speed);
+    if (side == "Right" && speed < 0)
+        rightMotor.Reverse(abs(speed));
 }
