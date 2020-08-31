@@ -3,7 +3,7 @@
 DS4CarController::DS4CarController(Car &car)
     : _car(car)
 {
-    analogStickThreshold = 10;
+    threshold = 10;
 }
 
 void DS4CarController::Setup(char *ps4Mac)
@@ -63,17 +63,6 @@ void DS4CarController::HandleInput()
         if (PS4.data.button.touchpad)
             Serial.println("Touch Pad Button");
 
-        if (PS4.data.button.l2)
-        {
-            Serial.print("l2 button at ");
-            Serial.println(PS4.data.analog.button.l2, DEC);
-        }
-        if (PS4.data.button.r2)
-        {
-            Serial.print("r2 button at ");
-            Serial.println(PS4.data.analog.button.r2, DEC);
-        }
-
         if (PS4.data.status.charging)
             Serial.println("The controller is charging");
         if (PS4.data.status.audio)
@@ -103,6 +92,8 @@ void DS4CarController::handleMovement()
         _car.GoRight();
     else if (analogSticksMoved())
         handleAnalogSticks();
+    else if (L2OrR2Moved())
+        handleL2andR2();
     else
         _car.Stop();
 
@@ -120,36 +111,42 @@ void DS4CarController::handleMovement()
 
 bool DS4CarController::analogSticksMoved()
 {
-    return abs(PS4.data.analog.stick.ly) >= analogStickThreshold ||
-           abs(PS4.data.analog.stick.ry) >= analogStickThreshold;
+    return abs(PS4.data.analog.stick.ly) >= threshold ||
+           abs(PS4.data.analog.stick.ry) >= threshold;
 }
 
 void DS4CarController::handleAnalogSticks()
 {
-    handleStick("Left", PS4.data.analog.stick.ly);
-    handleStick("Right", PS4.data.analog.stick.ry);
+    handleAnalogInput("Left", PS4.data.analog.stick.ly);
+    handleAnalogInput("Right", PS4.data.analog.stick.ry);
 }
 
-void DS4CarController::handleStick(String side, int coord)
+bool DS4CarController::L2OrR2Moved()
 {
-    if (abs(coord) > analogStickThreshold)
+    return PS4.data.button.l2 || PS4.data.button.r2;
+}
+
+void DS4CarController::handleL2andR2()
+{
+    handleAnalogInput("Left", PS4.data.analog.button.l2);
+    handleAnalogInput("Right", PS4.data.analog.button.r2);
+}
+
+void DS4CarController::handleAnalogInput(String side, int coord)
+{
+    if (abs(coord) > threshold)
     {
-        driveMotor(side, coord);
+        int speed = convertCoordToSpeed(coord);
+        _car.DriveMotor(side, speed);
     }
-}
-
-void DS4CarController::driveMotor(String side, int coords)
-{
-    int speed = convertCoordToSpeed(coords);
-    _car.DriveMotor(side, speed);
 }
 
 int DS4CarController::convertCoordToSpeed(int coord)
 {
-    if (abs(coord) < analogStickThreshold)
+    if (abs(coord) < threshold)
         return 0;
 
-    int minCoord = analogStickThreshold;
+    int minCoord = threshold;
     int maxCoord = (coord > 0) ? 127 : 128;
     int speed = map(abs(coord), minCoord, maxCoord, _car.GetMinSpeed(), _car.GetMaxSpeed());
     return (coord > 0) ? speed : -speed;
