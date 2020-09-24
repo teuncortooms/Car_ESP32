@@ -4,6 +4,7 @@
 #include <Arduino.h>
 #include <PS4Controller.h>
 #include <Car.h>
+#include <Enums.h>
 
 class DS4CarController
 {
@@ -12,7 +13,7 @@ class DS4CarController
 
 public:
     DS4CarController(Car &car);
-    void Setup(char *ps4Mac);
+    void Setup(char ps4Mac[18]);
     void WaitForController();
     void HandleInput();
 
@@ -22,7 +23,7 @@ private:
     void handleAnalogSticks();
     bool L2OrR2Moved();
     void handleL2andR2();
-    void handleAnalogInput(String side, int coords);
+    void handleAnalogInput(Side side, int coords);
     int convertCoordToSpeed(int coord);
 };
 

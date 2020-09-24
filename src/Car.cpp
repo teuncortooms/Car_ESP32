@@ -99,18 +99,18 @@ void Car::AdjustSpeed(int increment)
     SetSpeed(newSpeed);
 }
 
-void Car::DriveMotor(String side, int speed)
+void Car::DriveMotor(Side side, int speed)
 {
-    if (side == "Left" && speed == 0)
+    if (side == LEFT && speed == 0)
         leftMotor.Stop();
-    if (side == "Left" && speed > 0)
+    if (side == LEFT && speed > 0)
         leftMotor.Accelerate(speed);
-    if (side == "Left" && speed < 0)
+    if (side == LEFT && speed < 0)
         leftMotor.Reverse(abs(speed));
-    if (side == "Right" && speed == 0)
+    if (side == RIGHT && speed == 0)
         rightMotor.Stop();
-    if (side == "Right" && speed > 0)
+    if (side == RIGHT && speed > 0)
         rightMotor.Accelerate(speed);
-    if (side == "Right" && speed < 0)
+    if (side == RIGHT && speed < 0)
         rightMotor.Reverse(abs(speed));
 }

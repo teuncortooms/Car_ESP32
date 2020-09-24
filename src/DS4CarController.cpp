@@ -6,7 +6,7 @@ DS4CarController::DS4CarController(Car &car)
     threshold = 10;
 }
 
-void DS4CarController::Setup(char *ps4Mac)
+void DS4CarController::Setup(char ps4Mac[18])
 {
     PS4.begin(ps4Mac);
     Serial.print("DS4 control initialized for ");
@@ -117,8 +117,8 @@ bool DS4CarController::analogSticksMoved()
 
 void DS4CarController::handleAnalogSticks()
 {
-    handleAnalogInput("Left", PS4.data.analog.stick.ly);
-    handleAnalogInput("Right", PS4.data.analog.stick.ry);
+    handleAnalogInput(LEFT, PS4.data.analog.stick.ly);
+    handleAnalogInput(RIGHT, PS4.data.analog.stick.ry);
 }
 
 bool DS4CarController::L2OrR2Moved()
@@ -128,11 +128,11 @@ bool DS4CarController::L2OrR2Moved()
 
 void DS4CarController::handleL2andR2()
 {
-    handleAnalogInput("Left", PS4.data.analog.button.l2);
-    handleAnalogInput("Right", PS4.data.analog.button.r2);
+    handleAnalogInput(LEFT, PS4.data.analog.button.l2);
+    handleAnalogInput(RIGHT, PS4.data.analog.button.r2);
 }
 
-void DS4CarController::handleAnalogInput(String side, int coord)
+void DS4CarController::handleAnalogInput(Side side, int coord)
 {
     if (abs(coord) > threshold)
     {

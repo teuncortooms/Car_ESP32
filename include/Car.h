@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include <Motor.h>
+#include <Enums.h>
 
 class Car
 {
@@ -36,7 +37,7 @@ public:
     int GetMaxSpeed();
     void SetSpeed(int speed);
     void AdjustSpeed(int increment);
-    void DriveMotor(String side, int speed);
+    void DriveMotor(Side side, int speed);
 };
 
 #endif
